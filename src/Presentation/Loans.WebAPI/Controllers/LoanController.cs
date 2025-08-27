@@ -4,7 +4,6 @@ using Loans.Application.UseCases.GetAllLoans;
 using Loans.Application.UseCases.GetLoanByPagination;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Loans.Application.UseCases.GetLoanByPagination.GetLoanByPaginationRequest;
 
 namespace Loans.WebAPI.Controllers
 {

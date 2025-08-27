@@ -20,8 +20,17 @@ namespace Loans.Application.UseCases.GetLoanByPagination
 
         public async Task<PagedList<LoanItemResponse>> Handle(GetLoanByPaginationRequest request, CancellationToken cancellationToken)
         {
-            return await _loanRepository.GetPagedLoansAsync(request.Parameters, cancellationToken);
-        }
+            var pagedDomains = await _loanRepository.GetPagedLoansAsync(request.Parameters, cancellationToken);
+            var Items = _mapper.Map<List<LoanItemResponse>>(pagedDomains.Items);
+            var responsePageList = new PagedList<LoanItemResponse>
+                (
+                    Items,
+                    pagedDomains.PageNumber,
+                    pagedDomains.PageSize,
+                    pagedDomains.TotalCount
+                );
 
+            return responsePageList;
+        }
     }
 }

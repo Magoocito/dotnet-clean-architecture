@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Loans.Application.UseCases.Dtos;
 using Loans.Application.UseCases.GetAllLoans;
 using Loans.Domain.Entities;
 using Loans.Domain.Types;

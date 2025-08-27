@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Loans.Application.Repositories;
 using Loans.Application.UseCases.Dtos;
-using Loans.Application.UseCases.GetAllLoans;
 using Loans.Domain.Entities;
 using Loans.Infrastructure.Persistance.Context;
 using Loans.Infrastructure.Persistance.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Loans.Application.UseCases.GetLoanByPagination.GetLoanByPaginationRequest;
 
 namespace Loans.Infrastructure.Persistance.Repositories
 {
@@ -81,7 +79,7 @@ namespace Loans.Infrastructure.Persistance.Repositories
             }
         }
 
-        public async Task<PagedList<LoanItemResponse>> GetPagedLoansAsync
+        public async Task<PagedList<LoanDomain>> GetPagedLoansAsync
             (PaginationParameters parameters, CancellationToken cancellationToken)
         {
             var query = _context.Loans
@@ -95,9 +93,9 @@ namespace Loans.Infrastructure.Persistance.Repositories
                 .Take(parameters.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<List<LoanItemResponse>>(entities);
+            var items = _mapper.Map<List<LoanDomain>>(entities);
 
-            return new PagedList<LoanItemResponse>(items, parameters.PageNumber, parameters.PageSize, totalCount);
+            return new PagedList<LoanDomain>(items, parameters.PageNumber, parameters.PageSize, totalCount);
         }
     }
 }
