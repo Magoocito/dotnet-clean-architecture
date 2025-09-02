@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Loans.Application.Repositories;
+using Loans.Application.UseCases.Dtos;
 using Loans.Domain.Entities;
 using Loans.Infrastructure.Persistance.Context;
 using Loans.Infrastructure.Persistance.Entities;
@@ -76,6 +77,25 @@ namespace Loans.Infrastructure.Persistance.Repositories
 
                 throw;
             }
+        }
+
+        public async Task<(List<LoanDomain> Loans, int TotalCount)> GetPagedLoansAsync
+            (PaginationParameters parameters, CancellationToken cancellationToken)
+        {
+            var query = _context.Loans
+                .AsNoTracking()
+                .OrderBy(l => l.LoanId);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var entities = await query
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync(cancellationToken);
+
+            var loans = _mapper.Map<List<LoanDomain>>(entities);
+
+            return (loans, totalCount);
         }
     }
 }
