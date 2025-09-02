@@ -79,7 +79,7 @@ namespace Loans.Infrastructure.Persistance.Repositories
             }
         }
 
-        public async Task<PagedList<LoanDomain>> GetPagedLoansAsync
+        public async Task<(List<LoanDomain> Loans, int TotalCount)> GetPagedLoansAsync
             (PaginationParameters parameters, CancellationToken cancellationToken)
         {
             var query = _context.Loans
@@ -93,9 +93,9 @@ namespace Loans.Infrastructure.Persistance.Repositories
                 .Take(parameters.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<List<LoanDomain>>(entities);
+            var loans = _mapper.Map<List<LoanDomain>>(entities);
 
-            return new PagedList<LoanDomain>(items, parameters.PageNumber, parameters.PageSize, totalCount);
+            return (loans, totalCount);
         }
     }
 }
